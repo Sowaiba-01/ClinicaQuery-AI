@@ -23,3 +23,17 @@ backend/uploaded_pdfs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Testing / cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# Jupyter
+.ipynb_checkpoints
