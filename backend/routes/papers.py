@@ -3,7 +3,6 @@ from core.registry import list_documents, delete_document
 
 router = APIRouter()
 
-
 @router.get("/papers")
 async def get_papers():
     """Return all indexed documents with their metadata."""
