@@ -61,30 +61,63 @@ export default function UploadPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Upload ──────────────────────────────────────────────────────────────────
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+  const API_KEY = process.env.NEXT_PUBLIC_API_KEY ?? "";
+
   const handleUpload = async () => {
     if (!file) return;
     setStatus("uploading");
-    setProgress(0);
+    setProgress(10);
     setErrorMsg("");
 
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/upload`, formData, {
+      // Step 1: POST file — backend returns 202 immediately with task_id
+      const res = await axios.post(`${BACKEND}/api/upload`, formData, {
+        headers: { "X-API-Key": API_KEY },
         onUploadProgress: (ev) => {
-          if (ev.total) setProgress(Math.round((ev.loaded / ev.total) * 100));
+          if (ev.total) setProgress(Math.min(40, Math.round((ev.loaded / ev.total) * 40)));
         },
       });
-      setStatus("success");
-      setIndexed((prev) => [
-        { name: file.name, chunks: res.data.chunks_created ?? 0 },
-        ...prev,
-      ]);
+
+      const { task_id } = res.data;
+      if (!task_id) throw new Error("No task ID returned from server");
+
+      // Step 2: Poll /api/upload/status/:task_id every 3s until done or failed
+      const savedFile = file;
       setFile(null);
-    } catch {
+      let chunks = 0;
+
+      await new Promise<void>((resolve, reject) => {
+        let ticks = 0;
+        const interval = setInterval(async () => {
+          try {
+            ticks += 1;
+            setProgress(Math.min(95, 40 + ticks * 5));
+            const s = await axios.get(`${BACKEND}/api/upload/status/${task_id}`, {
+              headers: { "X-API-Key": API_KEY },
+            });
+            if (s.data.status === "done") {
+              clearInterval(interval);
+              chunks = s.data.result?.chunks_created ?? 0;
+              resolve();
+            } else if (s.data.status === "failed") {
+              clearInterval(interval);
+              reject(new Error(s.data.error ?? "Indexing failed"));
+            }
+          } catch (e) { clearInterval(interval); reject(e); }
+        }, 3000);
+      });
+
+      setProgress(100);
+      setStatus("success");
+      setIndexed((prev) => [{ name: savedFile.name, chunks }, ...prev]);
+    } catch (e: unknown) {
       setStatus("error");
-      setErrorMsg("Upload failed. Make sure the backend is running.");
+      const msg = e instanceof Error ? e.message : "Upload failed.";
+      setErrorMsg(msg);
     }
   };
 
@@ -216,26 +249,28 @@ export default function UploadPage() {
             </div>
           )}
 
-          {/* Indexed papers list */}
           {indexed.length > 0 && (
             <div className="space-y-2">
               <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
                 Indexed this session
               </p>
               {indexed.map((paper, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                  style={{
-                    background: "var(--success-bg)",
-                    border: "1px solid var(--success-border)",
-                  }}
-                >
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                  style={{ background: "var(--success-bg)", border: "1px solid var(--success-border)" }}>
                   <FileText size={15} style={{ color: "var(--success-text)" }} className="shrink-0" />
-                  <span className="text-sm flex-1 truncate" style={{ color: "var(--success-text)" }}>
-                    {paper.name}
-                  </span>
-                  <span className="text-xs shrink-0" style={{ color: "var(--success-text)", opacity: 0.7 }}>
+                  <span className="text-sm flex-1 truncate" style={{ color: "var(--success-text)" }}>{paper.name}</span>
+                  <span className="text-xs shrink-0" style={{ color: "var(--success-text)", opacity: 0.7 }}>{paper.chunks} chunks</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+      </div>
+    </AppShell>
+  );
+}
+r(--success-text)", opacity: 0.7 }}>
                     {paper.chunks} chunks
                   </span>
                 </div>

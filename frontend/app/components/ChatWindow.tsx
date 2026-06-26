@@ -140,7 +140,12 @@ export default function ChatWindow({ initialChatId }: { initialChatId?: string }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/query`, {
-        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ question:text }),
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "X-API-Key": process.env.NEXT_PUBLIC_API_KEY ?? "",
+        },
+        body:JSON.stringify({ question:text }),
       });
       if (!res.body) throw new Error("No body");
       const reader = res.body.getReader();
@@ -268,7 +273,7 @@ export default function ChatWindow({ initialChatId }: { initialChatId?: string }
             <Send size={14}/>Ask
           </button>
         </div>
-        <p className="text-center text-xs mt-2" style={{ color:"var(--text-muted)" }}>For research purposes only · Always consult a licensed physician</p>
+        <p className="text-center text-xs mt-2" style={{ color:"var(--text-muted)" }}>For research purposes only — always consult a licensed physician for clinical decisions.</p>
       </div>
     </div>
   );

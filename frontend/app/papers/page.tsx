@@ -11,6 +11,7 @@ import {
   RefreshCw,
   BookOpen,
   Upload,
+  Plus,
 } from "lucide-react";
 
 interface Paper {
@@ -49,7 +50,9 @@ export default function PapersPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/papers`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/papers`, {
+        headers: { "X-API-Key": process.env.NEXT_PUBLIC_API_KEY ?? "" },
+      });
       const data = await res.json();
       setPapers(data.papers ?? []);
     } catch {
@@ -68,6 +71,7 @@ export default function PapersPage() {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/papers/${doc_id}`, {
         method: "DELETE",
+        headers: { "X-API-Key": process.env.NEXT_PUBLIC_API_KEY ?? "" },
       });
       setPapers((prev) => prev.filter((p) => p.doc_id !== doc_id));
     } catch {
@@ -272,11 +276,10 @@ export default function PapersPage() {
                 background: "var(--surface)",
               }}
             >
-              <Upload size={14} />
+              <Plus size={14} />
               Upload another paper
             </a>
           )}
-
         </div>
       </div>
     </AppShell>
