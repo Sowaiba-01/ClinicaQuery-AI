@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
-
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
