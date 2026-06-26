@@ -17,12 +17,12 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # In-memory task store — maps task_id → status dict
 # For production scale this would be Redis; fine for single-instance deployment
-_tasks: dict[str, dict] = {}
+_tasks: dict = {}
 
 
 # ── PDF validation ────────────────────────────────────────────────────────────
 
-def _validate_pdf_bytes(content: bytes) -> str | None:
+def _validate_pdf_bytes(content: bytes) -> None:
     """
     Deterministic magic-byte + structure check.
     Returns an error string if invalid, None if OK.
