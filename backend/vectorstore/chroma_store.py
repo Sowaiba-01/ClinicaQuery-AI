@@ -1,7 +1,4 @@
-"""
-ChromaDB singleton — one persistent client shared across the entire process.
-Initialized once at startup via FastAPI lifespan; never re-opened per request.
-"""
+
 import chromadb
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import StorageContext
