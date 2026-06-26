@@ -270,16 +270,3 @@ export default function UploadPage() {
     </AppShell>
   );
 }
-r(--success-text)", opacity: 0.7 }}>
-                    {paper.chunks} chunks
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-        </div>
-      </div>
-    </AppShell>
-  );
-}
