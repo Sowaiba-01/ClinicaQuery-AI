@@ -71,7 +71,7 @@ export default function UploadPage() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post("http://localhost:8000/api/upload", formData, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}/api/upload`, formData, {
         onUploadProgress: (ev) => {
           if (ev.total) setProgress(Math.round((ev.loaded / ev.total) * 100));
         },

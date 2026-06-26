@@ -1,10 +1,15 @@
 import AppShell from "./components/AppShell";
 import ChatWindow from "./components/ChatWindow";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ chat?: string }>;
+}) {
+  const params = await searchParams;
   return (
     <AppShell>
-      <ChatWindow />
+      <ChatWindow initialChatId={params.chat} />
     </AppShell>
   );
 }
