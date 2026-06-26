@@ -6,6 +6,7 @@ An AI-powered medical research assistant that lets you upload PDF papers and ask
 
 ---
 
+
 ## Features
 
 - **PDF Upload & Indexing** — drag-and-drop PDFs and index them into a vector database in seconds
