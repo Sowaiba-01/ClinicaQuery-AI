@@ -6,6 +6,7 @@ from vectorstore.chroma_store import get_vector_store
 from core.guardrails import check_hallucination
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 Settings.llm = GoogleGenAI(
