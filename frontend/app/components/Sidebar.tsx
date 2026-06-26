@@ -98,10 +98,10 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       {/* Chat history */}
-      <div className="flex-1 overflow-y-auto sidebar-scroll px-2 pb-2">
+      <div className="flex-1 overflow-y-auto px-2 pb-2">
         {chats.length === 0 ? (
           <div className="px-3 py-8 text-center">
-            <MessageSquare size={20} className="mx-auto mb-2 text-slate-600" />
+            <MessageSquare size={20} className="mx-auto mb-2" style={{ color: "#334155" }} />
             <p className="text-xs" style={{ color: "#475569" }}>No chats yet</p>
           </div>
         ) : (
