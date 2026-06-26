@@ -1,7 +1,4 @@
-"""
-Document registry — persists metadata for all indexed PDFs.
-Stored in ./documents.json next to main.py.
-"""
+
 import json
 import os
 from datetime import datetime, timezone
