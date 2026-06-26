@@ -1,11 +1,4 @@
-"""
-Guardrails — hybrid approach:
-  1. Deterministic lexical-overlap score (Jaccard similarity) — not foolable by LLM bias
-  2. LLM self-check as a secondary signal only
-  3. Final confidence = weighted blend of both
 
-This avoids the "LLM grading its own homework" problem.
-"""
 import os
 import re
 import json
