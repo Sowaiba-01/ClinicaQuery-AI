@@ -6,7 +6,6 @@ from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from vectorstore.chroma_store import get_vector_store
 from core.registry import register_document
 from dotenv import load_dotenv
-
 load_dotenv()
 
 Settings.embed_model = GoogleGenAIEmbedding(
