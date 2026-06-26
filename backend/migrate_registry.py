@@ -1,7 +1,4 @@
-"""
-One-time migration: backfill documents.json registry from existing ChromaDB data.
-Run with: python migrate_registry.py
-"""
+
 import os
 import sys
 import json
