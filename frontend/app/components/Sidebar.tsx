@@ -2,7 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { MessageSquare, Upload, Files, FlaskConical, LogOut, Plus, Trash2 } from "lucide-react";
+import { MessageSquare, Upload, Files, FlaskConical, LogOut, Plus, Trash2, BarChart2 } from "lucide-react";
 
 export interface ChatMeta { id: string; title: string; createdAt: string; }
 
@@ -145,6 +145,7 @@ export default function Sidebar({ user }: SidebarProps) {
         {[
           { href: "/upload", label: "Upload PDF", icon: Upload },
           { href: "/papers", label: "My Papers", icon: Files },
+          { href: "/evaluation", label: "RAG Evaluation", icon: BarChart2 },
         ].map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
