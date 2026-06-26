@@ -1,9 +1,4 @@
-"""
-FastAPI entrypoint.
-- Lifespan: warms up the ChromaDB singleton so no request ever pays
-  the cold-open cost or risks a concurrent SQLite lock on startup.
-- Auth middleware: validates X-API-Key on all /api/* routes except health.
-"""
+
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
